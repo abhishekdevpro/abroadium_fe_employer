@@ -6,6 +6,7 @@ import BreadCrumb from "../../BreadCrumb";
 import SocialNetworkBox from "./components/SocialNetworkBox";
 import CopyrightFooter from "../../CopyrightFooter";
 import MenuToggler from "../../MenuToggler";
+import DefaulHeader2 from "@/components/header/DefaulHeader2";
 
 const index = () => {
   return (
@@ -16,7 +17,7 @@ const index = () => {
       <LoginPopup />
       {/* End Login Popup Modal */}
 
-      <DashboardHeader />
+      <DefaulHeader2 />
       {/* End Header */}
 
       <MobileMenu />

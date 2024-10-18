@@ -6,6 +6,7 @@ import BreadCrumb from "../../BreadCrumb";
 import MyProfile from "./components";
 
 import MenuToggler from "../../MenuToggler";
+import DefaulHeader2 from "@/components/header/DefaulHeader2";
 
 const MyProfileEmploeeDBPage = () => {
   return (
@@ -16,7 +17,7 @@ const MyProfileEmploeeDBPage = () => {
       <LoginPopup />
       {/* End Login Popup Modal */}
 
-      <DashboardHeader />
+      <DefaulHeader2 />
       {/* End Header */}
 
       <MobileMenu />

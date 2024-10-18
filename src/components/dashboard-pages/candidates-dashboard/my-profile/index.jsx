@@ -10,6 +10,7 @@ import CopyrightFooter from "../../CopyrightFooter";
 import DashboardCandidatesHeader from "../../../header/DashboardCandidatesHeader";
 import MenuToggler from "../../MenuToggler";
 import { Switch } from "@/components/ui/switch";
+import DefaulHeader2 from "@/components/header/DefaulHeader2";
 
 const index = () => {
   return (
@@ -20,7 +21,7 @@ const index = () => {
       <LoginPopup />
       {/* End Login Popup Modal */}
 
-      <DashboardCandidatesHeader />
+      <DefaulHeader2 />
       {/* End Header */}
 
       <MobileMenu />

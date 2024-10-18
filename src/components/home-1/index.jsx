@@ -92,11 +92,7 @@ const index = () => {
       {/* Desktop Menu */}
       <div className="main-menu hidden lg:flex  font-medium text-white">
         <ul className="flex ">
-          <li>
-            <Link href="" className="hover:text-gray-300">
-              Home
-            </Link>
-          </li>
+          
           <li>
             <Link href="" className="hover:text-gray-300">
               Jobs

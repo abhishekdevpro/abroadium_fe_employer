@@ -1,3 +1,6 @@
+import { useEffect} from "react";
+
+import axios from "axios";
 
 import candidates from "@/data/candidates";
 import candidateResume from "@/data/candidateResume";
@@ -14,26 +17,55 @@ import {useParams } from "react-router-dom";
 import { useState } from "react";
 import { useRef } from "react";
 import MetaComponent from "@/components/common/MetaComponent";
-
-const metadata = {
-  title:
-    "Candidate Single Dyanmic V1 || Abroadium - Job Borad ReactJs Template",
-  description: "Abroadium - Job Borad ReactJs Template",
-};
+import DefaulHeader2 from "@/components/header/DefaulHeader2";
 
 const CandidateSingleDynamicV1 = () => {
   let params = useParams();
   const id = params.id;
-  const candidate = candidates.find((item) => item.id == id) || candidate[0];
+  const [candidate, setCandidate] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const [audioSrc] = useState("https://www.example.com/your-audio-file.mp3"); // Pre-uploaded audio file URL
-  const [videoSrc] = useState("https://www.example.com/your-video-file.mp4"); // Pre-uploaded video file URL
+  const [audioSrc] = useState("https://www.example.com/your-audio-file.mp3");
+  const [videoSrc] = useState("https://www.example.com/your-video-file.mp4");
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [speed, setSpeed] = useState(1);
-
   const audioRef = useRef(null);
+
+  // Fetch candidate data
+  useEffect(() => {
+    const fetchCandidate = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          setError("User not authenticated");
+          setLoading(false);
+          return;
+        }
+
+        const response = await axios.get(
+          `https://api.sentryspot.co.uk/api/employeer/job-seekers/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        setCandidate(response.data.data.jobskkers_detail);
+        console.log(response.data.data.jobskkers_detail);
+      } catch (error) {
+        console.error("Error fetching candidate data:", error);
+        setError("Failed to load candidate data");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCandidate();
+  }, [id]);
 
   // Format time in minutes:seconds
   const formatTime = (time) => {
@@ -71,42 +103,42 @@ const CandidateSingleDynamicV1 = () => {
     audioRef.current.playbackRate = newSpeed;
   };
 
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
+
   return (
     <>
-    <MetaComponent meta={metadata} />
-      {/* <!-- Header Span --> */}
+      <MetaComponent meta={{ title: candidate?.name || "Candidate Profile" }} />
       <span className="header-span"></span>
 
       <LoginPopup />
-      {/* End Login Popup Modal */}
-
-      <DefaulHeader />
-      {/* <!--End Main Header --> */}
-
+      <DefaulHeader2 />
       <MobileMenu />
-      {/* End MobileMenu */}
 
-      {/* <!-- Job Detail Section --> */}
       <section className="candidate-detail-section">
-        <div className="upper-box">
+       
           <div className="auto-container">
             <div className="candidate-block-five">
-              <div className="inner-box">
+              <div className="inner-box mt-4">
                 <div className="content">
                   <figure className="image">
-                    <img
-                     
-                      src={candidate?.avatar}
-                      alt="avatar"
-                    />
+                    <img 
+                    src={`https://api.sentryspot.co.uk${candidate?.photo}`}
+                   
+                     alt="avatar" />
                   </figure>
-                  <h4 className="name">{candidate?.name}</h4>
+                  <h4 className="name">{candidate?.first_name} {candidate?.last_name}    </h4>
 
                   <ul className="candidate-info">
-                    <li className="designation">{candidate?.designation}</li>
+                    <li className="designation">{candidate?.proffesional_title || 'developer'}</li>
                     <li>
                       <span className="icon flaticon-map-locator"></span>
-                      {candidate?.location}
+                      {candidate?.states.name}
                     </li>
                     <li>
                       <span className="icon flaticon-money"></span> $
@@ -114,7 +146,7 @@ const CandidateSingleDynamicV1 = () => {
                     </li>
                     <li>
                       <span className="icon flaticon-clock"></span> Member
-                      Since,Aug 19, 2020
+                      Since, {candidate?.created_at}
                     </li>
                   </ul>
 
@@ -126,7 +158,6 @@ const CandidateSingleDynamicV1 = () => {
                 </div>
 
                 <div className="btn-box">
-                 
                   <a
                     className="theme-btn btn-style-one ms-2"
                     href="/images/sample.pdf"
@@ -138,8 +169,6 @@ const CandidateSingleDynamicV1 = () => {
                     <i className="flaticon-bookmark"></i>
                   </button>
                 </div>
-                
-              </div>
               
             </div>
             {/*  <!-- Candidate block Five --> */}

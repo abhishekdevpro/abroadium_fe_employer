@@ -1,22 +1,21 @@
 import { IoLogOutOutline } from "react-icons/io5";
-
 import logo from "../../Images/logo.png";
-
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import HeaderNavContent from "./HeaderNavContent";
 import { Button } from "../ui/button";
 import { useDispatch, useSelector } from "react-redux";
 import { logout, toggleSignupDialog } from "@/store/slices/auth";
+import { FaBell, FaEnvelope, FaUserCircle } from "react-icons/fa";
 
 const DefaulHeader2 = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { loading, userInfo, userToken, error, success, message } = useSelector(
-    (state) => state.auth
-  );
+  const { userToken } = useSelector((state) => state.auth);
   const [navbar, setNavbar] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const changeBackground = () => {
     if (window.scrollY >= 10) {
@@ -32,65 +31,108 @@ const DefaulHeader2 = () => {
         if (!userToken) dispatch(toggleSignupDialog());
         else navigate("/employers-dashboard/post-jobs");
         break;
-
       default:
         break;
     }
   };
 
+  const toggleDropdown = (event) => {
+    event.stopPropagation(); // Prevent this click from being detected as a click outside
+    setIsDropdownOpen((prev) => !prev);
+  };
+
+  const closeDropdown = () => {
+    setIsDropdownOpen(false);
+  };
+
   useEffect(() => {
     window.addEventListener("scroll", changeBackground);
+    const token = localStorage.getItem("token");
+    setIsLoggedIn(!!token);
+
+    // Close dropdown when clicking outside
+    const handleClickOutside = (event) => {
+      if (!event.target.closest(".profile-dropdown") && !event.target.closest(".profile-icon")) {
+        closeDropdown();
+      }
+    };
+    document.addEventListener("click", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
   }, []);
 
   return (
-    // <!-- Main Header-->
-    <header style={{backgroundColor:"#4C3957"}}
+    <header
+      style={{ backgroundColor: "#4C3957" }}
       className={`main-header font-bold border z-10 ${
-        navbar ? "fixed-header animated slideInDown   " : ""
+        navbar ? "fixed-header animated slideInDown" : ""
       }`}
     >
-      {/* <!-- Main box --> */}
-      <div className="main-box ">
-        {/* <!--Nav Outer --> */}
+      <div className="main-box">
         <div className="nav-outer">
           <div className="logo-box">
             <div className="me-10">
-              <Link to="/">
-                <img
-                  alt="brand"
-                  src={logo}
-                  className="h-16 p-2 "
-                />
+              <Link to="/employers-dashboard/dashboard">
+                <img alt="brand" src={logo} className="h-16 p-2" />
               </Link>
             </div>
           </div>
-          {/* End .logo-box */}
-
           <HeaderNavContent />
-          {/* <!-- Main Menu End--> */}
         </div>
-        {/* End .nav-outer */}
 
         <div className="outer-box">
-          {/* <!-- Add Listing --> */}
-          {/* <Link
-            to="/candidates-dashboard/cv-manager"
-            className="upload-cv text-blue-950"
-          >
-            Upload your CV
-          </Link> */}
-          {/* <!-- Login/Register --> */}
           <div className="btn-box">
             {userToken ? (
-              <Button
-                className="bg-gray-500 p-3 ml-2 duration-500 hover:bg-[#E60278]"
-                title="logout"
-                onClick={() => {
-                  dispatch(logout());
-                }}
-              >
-                <IoLogOutOutline size={24} className="" />
-              </Button>
+              <>
+                <div className="flex gap-4 pt-2 me-3">
+                  <FaBell className="text-white text-xl" />
+                  <FaEnvelope className="text-white text-xl" />
+                  
+                  {/* Profile Icon with Dropdown */}
+                  <div className="relative">
+                    <FaUserCircle
+                      className="text-white text-xl cursor-pointer profile-icon"
+                      onClick={toggleDropdown}
+                    />
+                    {isDropdownOpen && (
+                      <div className="absolute top-8 right-0 mt-2 w-40 bg-white shadow-lg rounded-md profile-dropdown z-50">
+                        <ul className="text-gray-800">
+                          <li className="hover:bg-gray-200 px-4 py-2 cursor-pointer">
+                            <Link to="/employers-dashboard/dashboard" onClick={closeDropdown}>Dashboard</Link>
+                          </li>
+                          <li className="hover:bg-gray-200 px-4 py-2 cursor-pointer">
+                            <Link to="/employers-dashboard/my-profile" onClick={closeDropdown}>Profile</Link>
+                          </li>
+                          <li className="hover:bg-gray-200 px-4 py-2 cursor-pointer">
+                            <button
+                              className="flex items-center"
+                              onClick={() => {
+                                dispatch(logout());
+                                closeDropdown();
+                              }}
+                            >
+                              <IoLogOutOutline size={20} className="mr-2" />
+                              Logout
+                            </button>
+                          </li>
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <Button
+                  className="bg-gray-500 p-3 ml-2 duration-500 hover:bg-[#E60278]"
+                  title="logout"
+                  onClick={() => {
+                    dispatch(logout());
+                  }}
+                >
+                  <IoLogOutOutline size={24} />
+                </Button>
+              </>
             ) : (
               <button
                 className="theme-btn btn-style-three call-modal p-2 text-blue-950 text-lg px-3 font-light"
@@ -101,20 +143,6 @@ const DefaulHeader2 = () => {
                 Sign Up
               </button>
             )}
-            <button
-              className="theme-btn btn-style-one bg-blue-950 text-white ml-4"
-              onClick={() => {
-                handleCheck("job-post");
-              }}
-            >
-              Job Post
-            </button>
-            {/* <Link
-              to="/employers-dashboard/post-jobs"
-              className="theme-btn btn-style-one bg-blue-950 text-white"
-            >
-              Job Post
-            </Link> */}
           </div>
         </div>
       </div>

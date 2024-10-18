@@ -1,7 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -26,12 +25,14 @@ const Login = ({ setIsLogin }) => {
     (state) => state.auth
   );
 
+  const [showPassword, setShowPassword] = useState(false);
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: zodResolver(LoginSchema), // Connect Zod validation schema
+    resolver: zodResolver(LoginSchema),
   });
 
   const submitHandler = async (e) => {
@@ -43,22 +44,24 @@ const Login = ({ setIsLogin }) => {
           password,
         })
       );
-    } else toast.error("please fill all the fields");
+    } else {
+      toast.error("please fill all the fields");
+    }
   };
+
   return (
     <Card className="w-[350px] sm:w-[400px] m-auto shadow-lg">
       <CardHeader>
         <CardTitle className="text-3xl text-left font-ubuntu">
           Get started for Free
         </CardTitle>
-        {/* <CardDescription>Deploy your new project in one-click.</CardDescription> */}
       </CardHeader>
       <CardContent>
         <form
           className="flex justify-between space-x-2 flex-wrap gap-4"
           onSubmit={handleSubmit(submitHandler)}
         >
-          <div className="flex flex-col w-full  gap-2">
+          <div className="flex flex-col w-full gap-2">
             <Label htmlFor="email" className="text-left">
               Email
             </Label>
@@ -73,19 +76,26 @@ const Login = ({ setIsLogin }) => {
               <p className="text-red-500 text-sm">{errors.email.message}</p>
             )}
           </div>
-          <div className="flex flex-col w-full  gap-2  ">
+          <div className="flex flex-col w-full gap-2">
             <Label htmlFor="password" className="text-left">
               Password
             </Label>
-            <Input
-              id="password"
-              type="password"
-              {...register("password")}
-              placeholder="Password"
-              className={`${errors.password && " !border-red-500"}`}
-              onFocus={() => setShowTooltip(true)}
-              onBlur={() => setShowTooltip(false)}
-            />
+            <div className="relative">
+              <Input
+                id="password"
+                type={showPassword ? "text" : "password"}
+                {...register("password")}
+                placeholder="Password"
+                className={`${errors.password && " !border-red-500"}`}
+              />
+              <button
+                type="button"
+                className="absolute right-2 top-2 text-sm text-blue-500"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? "Hide" : "Show"}
+              </button>
+            </div>
             {errors.password && (
               <p className="text-red-500 text-sm">{errors.password.message}</p>
             )}
@@ -120,10 +130,6 @@ const Login = ({ setIsLogin }) => {
           </p>
         </div>
       </CardContent>
-      {/* <CardFooter className="flex justify-between">
-        <Button variant="outline">Cancel</Button>
-        <Button>Deploy</Button>
-      </CardFooter> */}
     </Card>
   );
 };

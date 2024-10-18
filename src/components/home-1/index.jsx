@@ -251,8 +251,8 @@ const index = () => {
           <div className="icon flex items-start">
             <i className="fading text-4xl text-gray-500"></i>
             <div className=" -4">
-              <h2 className="font-bold text-xl">50+ organizations</h2>
-              <p className="text-gray-600">
+              <h2 className="font-bold text-xl font-sans">50+ organizations</h2>
+              <p className="text-gray-600 font-sans">
                 Choose to use our AI-Enabled services for smoother HR processes.
               </p>
             </div>
@@ -260,8 +260,8 @@ const index = () => {
           <div className="icoxt flex items-start">
             <i className="fa=ext-4xl text-gray-500"></i>
             <div className="txt ml-4">
-              <h2 className="font-bold text-xl">Huge number</h2>
-              <p className="text-gray-600">
+              <h2 className="font-bold text-xl font-sans">Huge number</h2>
+              <p className="text-gray-600 font-sans">
                 Of Jobseekers already choosing to use our services.
               </p>
             </div>

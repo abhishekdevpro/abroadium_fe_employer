@@ -114,8 +114,8 @@ import { Toaster } from "react-hot-toast";
 import SignUpDialog from "./components/auth/SignUp";
 import Showcase from "./pages/showcase/Index";
 import EmployerList from "./pages/employers-list/employers-list";
-import Community from "./components/dashboard-pages/employers-dashboard/community/Community";
-
+// import Community from "./components/dashboard-pages/employers-dashboard/community/Community";
+ import Community from './components/community/index'
 function App() {
   useEffect(() => {
     Aos.init({

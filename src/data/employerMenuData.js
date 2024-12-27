@@ -31,7 +31,7 @@ const employerMenu = [
     id: 5,
     name: "Community",
     icon: "la-safari",
-    routePath: "/employers-dashboard/resume-alerts",
+    routePath: "/employers-dashboard/community",
     active: "",
   },
   {
@@ -90,29 +90,28 @@ const employerMenu = [
     routePath: "/employers-dashboard/change-password",
     active: "",
   },
-  
+
   {
     id: 14,
     name: "Buy Coin",
-   icon: "la-bitcoin",
-   routePath: "/employers-dashboard/buycoin",
-  active: "",
+    icon: "la-bitcoin",
+    routePath: "/employers-dashboard/buycoin",
+    active: "",
   },
   {
-   id: 15,
-   name: "Setting",
-  icon: "la-gear",
-  routePath: "/",
- active: "",
- },
- {
-  id: 16,
-  name: "signout",
-  icon: "la-sign-out",
- routePath: "/",
-active: "",
-},
- 
+    id: 15,
+    name: "Setting",
+    icon: "la-gear",
+    routePath: "/",
+    active: "",
+  },
+  {
+    id: 16,
+    name: "signout",
+    icon: "la-sign-out",
+    routePath: "/",
+    active: "",
+  },
 
   // {
   //   id: 12,
